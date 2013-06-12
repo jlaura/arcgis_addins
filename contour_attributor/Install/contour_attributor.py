@@ -48,7 +48,6 @@ class PolyLineLayers(object):
         self.dropdownWidth = 'WWWWWW'
         self.width = 'WWWWWW'
         self.selectedlayer = None
-        self.sr = None
     def onSelChange(self, selection):
         if selection != None:
             self.selectedlayer = selection
@@ -58,7 +57,6 @@ class PolyLineLayers(object):
             contour_start.enabled = True
             contour_interval.enabled = True
             write_edits.enabled = True
-            self.sr = arcpy.Describe(self.selectedlayer).spatialReference
             pythonaddins.MessageBox('If you have not already, please start an edit session on the selected layer.', "Info", 0)
         else:
             self.selected_layer = None
@@ -72,7 +70,8 @@ class PolyLineLayers(object):
             self.items=[]
             if len(layers) != 0:
                 for layer in layers:
-                    self.items.append(layer.name)
+                    if layer.isFeatureLayer:
+                        self.items.append(layer.name)
     def onEnter(self):
         pass
     def refresh(self):
@@ -159,9 +158,16 @@ class WriteEdits(object):
         #Update cursor to write the intervals
         while len(drawline.intersecting_contours) != 0:
             contour = drawline.intersecting_contours.popleft()
-            with arcpy.da.UpdateCursor(select_layer.selectedlayer, ['FID', select_field.selectedfield],""""FID" = {}""".format(contour)) as cursor:
-                for row in cursor:
-                    row[1] = startval
-                    cursor.updateRow(row)
-                startval += interval
+            try:
+                with arcpy.da.UpdateCursor(select_layer.selectedlayer, ['OID@', select_field.selectedfield],""""OBJECTID" = {}""".format(contour)) as cursor:
+                    for row in cursor:
+                        row[1] = startval
+                        cursor.updateRow(row)
+                    startval += interval
+            except:
+                with arcpy.da.UpdateCursor(select_layer.selectedlayer, ['FID', select_field.selectedfield],""""FID" = {}""".format(contour)) as cursor:
+                    for row in cursor:
+                        row[1] = startval
+                        cursor.updateRow(row)
+                    startval += interval
 
