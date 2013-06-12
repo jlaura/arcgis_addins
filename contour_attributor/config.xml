@@ -1,0 +1,38 @@
+<ESRI.Configuration xmlns="http://schemas.esri.com/Desktop/AddIns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<Name>Contour Attributor</Name>
+<AddInID>{39bfa2c7-c7fe-46e5-b38e-1e8c6177e285}</AddInID>
+<Description>A toolbar to allow for rapid, semi-automated polyline attribution.</Description>
+<Version>0.1</Version>
+<Image>Images\contour_16x16.png</Image>
+<Author>Jay Laura</Author>
+<Company>USGS</Company>
+<Date>06/11/2013</Date>
+<Targets>
+    <Target name="Desktop" version="10.1" />
+</Targets>
+<AddIn language="PYTHON" library="contour_attributor.py" namespace="contour_attributor"><ArcMap>
+    <Commands>
+        <ComboBox caption="Layer: " category="Contout_Attributor" class="PolyLineLayers" id="contour_attributor.select_layer" itemSizeString="WWWWWW" message="" rows="4" sizeString="WWWWWW" tip="Select a Layer to Edit"><Help heading="" /></ComboBox>
+        <ComboBox caption="Field: " category="Contout_Attributor" class="PolylineFieldEditor" id="contour_attributor.select_field" itemSizeString="WWWWWW" message="" rows="4" sizeString="WWWWWW" tip="Select a Field to Edit"><Help heading="" /></ComboBox>
+        <Tool caption="Draw PolyLine" category="Contout_Attributor" class="DrawLine" id="contour_attributor.drawline" image="Images\framing_square.png" message="" tip="Click to draw a polyline"><Help heading="" /></Tool>
+        <ComboBox caption="Start Elev. " category="Contout_Attributor" class="ContourStart" id="contour_attributor.contour_start" itemSizeString="WWWWWW" message="" rows="4" sizeString="WWWWWW" tip="Enter an integer contour start"><Help heading="" /></ComboBox>
+        <ComboBox caption="Contour Interval " category="Contout_Attributor" class="ContourInterval" id="contour_attributor.contour_interval" itemSizeString="WWWWWW" message="" rows="4" sizeString="WWWWWW" tip="Enter an integer contour start"><Help heading="" /></ComboBox>
+        <Button caption="Write Edits" category="Contout_Attributor" class="WriteEdits" id="contour_attributor.write_edits" image="Images\edit.png" tip="Click to Write Edits"><Help heading="" /></Button>
+        </Commands>
+    <Extensions>
+        </Extensions>
+    <Toolbars>
+        <Toolbar caption="Contour Attributor" category="Contout_Attributor" id="contour_attributor.toolbar" showInitially="true">
+            <Items>
+                <ComboBox refID="contour_attributor.select_layer" />
+                <ComboBox refID="contour_attributor.select_field" />
+                <ComboBox refID="contour_attributor.contour_start" />
+                <ComboBox refID="contour_attributor.contour_interval" />
+                <Tool refID="contour_attributor.drawline" />
+                <Button refID="contour_attributor.write_edits" />
+            </Items>
+        </Toolbar>
+        </Toolbars>
+    <Menus>
+        </Menus>
+    </ArcMap></AddIn></ESRI.Configuration>

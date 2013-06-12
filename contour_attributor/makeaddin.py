@@ -3,7 +3,6 @@ import re
 import zipfile
 
 current_path = os.path.dirname(os.path.abspath(__file__))
-
 out_zip_name = os.path.join(current_path, 
                             os.path.basename(current_path) + ".esriaddin")
 

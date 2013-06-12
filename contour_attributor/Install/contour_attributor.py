@@ -1,12 +1,13 @@
 import arcpy
 import pythonaddins
+from collections import deque
 
 class DrawLine(object):
-    """Implementation for testaddin_addin.drawline (Tool)"""
+    """Implementation for contour_attributor.drawline (Tool)"""
     def __init__(self):
         self.enabled = False
         self.shape = "Line"
-        self.intersecting_contours = []
+        self.intersecting_contours = deque()
     def onMouseDown(self, x, y, button, shift):
         pass
     def onMouseDownMap(self, x, y, button, shift):
@@ -28,6 +29,8 @@ class DrawLine(object):
     def deactivate(self):
         pass
     def onLine(self, line_geometry):
+        #Reset the deque to ensure that sequential selections without a write are not pushed to the table.
+        self.intersecting_contours = deque()
         intersection_order = {}
         startpt = arcpy.Geometry("point", arcpy.Point(line_geometry.firstPoint.X, line_geometry.firstPoint.Y),arcpy.Describe(select_layer.selectedlayer).spatialReference )
         with arcpy.da.SearchCursor(arcpy.SelectLayerByLocation_management(select_layer.selectedlayer, 'intersect', line_geometry), ['OID@','Shape@']) as cursor:
@@ -37,10 +40,8 @@ class DrawLine(object):
         for key in sorted(intersection_order.iterkeys()):
             self.intersecting_contours.append(intersection_order[key])
 
-
-
 class PolyLineLayers(object):
-    """Implementation for testaddin_addin.select_layer (ComboBox)"""
+    """Implementation for contour_attributor.select_layer (ComboBox)"""
     def __init__(self):
         self.editable = True
         self.enabled = True
@@ -78,7 +79,7 @@ class PolyLineLayers(object):
         pass
 
 class PolylineFieldEditor(object):
-    """Implementation for testaddin_addin.select_field (select_field)"""
+    """Implementation for contour_attributor.select_field (select_field)"""
     def __init__(self):
         self.editable = True
         self.enabled = False
@@ -103,13 +104,13 @@ class PolylineFieldEditor(object):
         pass
 
 class ContourStart(object):
-    """Implementation for testaddin_addin.contour_start (contour_start)"""
+    """Implementation for contour_attributor.contour_start (contour_start)"""
     def __init__(self):
         self.editable = True
         self.enabled = False
         self.dropdownWidth = 'WWWWWW'
         self.width = 'WWWWWW'
-        self.contourstart = None
+        contourstart = None
     def onSelChange(self, selection):
         pass
     def onEditChange(self, text):
@@ -125,7 +126,7 @@ class ContourStart(object):
         pass
 
 class ContourInterval(object):
-    """Implementation for testaddin_addin.contour_start (contour_interval)"""
+    """Implementation for contour_attributor.contour_start (contour_interval)"""
     def __init__(self):
         self.editable = True
         self.enabled = False
@@ -147,20 +148,20 @@ class ContourInterval(object):
         pass
 
 class WriteEdits(object):
-    """Implementation for testaddin_addin.write_edits (write_edits)"""
+    """Implementation for contour_attributor.write_edits (write_edits)"""
     def __init__(self):
         self.enabled = False
     def onClick(self):
         startval = contour_start.contourstart
-        interval =contour_interval.interval
+        interval = contour_interval.interval
         if len(drawline.intersecting_contours) == 0:
             pythonaddins.MessageBox("Please select one or more contour lines to attribute", "Info", 0)
         #Update cursor to write the intervals
-        for contour in drawline.intersecting_contours:
+        while len(drawline.intersecting_contours) != 0:
+            contour = drawline.intersecting_contours.popleft()
             with arcpy.da.UpdateCursor(select_layer.selectedlayer, ['FID', select_field.selectedfield],""""FID" = {}""".format(contour)) as cursor:
                 for row in cursor:
                     row[1] = startval
                     cursor.updateRow(row)
                 startval += interval
-
 
