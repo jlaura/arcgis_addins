@@ -59,7 +59,7 @@ class PolyLineLayers(object):
             write_edits.enabled = True
             pythonaddins.MessageBox('If you have not already, please start an edit session on the selected layer.', "Info", 0)
         else:
-            self.selected_layer = None
+            self.selectedlayer = None
     def onEditChange(self, text):
         pass
     def onFocus(self, focused):
