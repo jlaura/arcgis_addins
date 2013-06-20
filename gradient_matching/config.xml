@@ -1,0 +1,22 @@
+<ESRI.Configuration xmlns="http://schemas.esri.com/Desktop/AddIns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><Name>Gradient Domain Image matching</Name><AddInID>{556920ca-a55c-428c-a9bd-50cf218b955c}</AddInID><Description>A plugin to extract overlapping images and generate a gradient domain map to improve mosaicing.</Description><Version>0.1</Version><Image /><Author>Jay Laura</Author><Company>USGS</Company><Date>06/13/2013</Date><Targets><Target name="Desktop" version="10.1" /></Targets><AddIn language="PYTHON" library="gradientmatching_addin.py" namespace="gradientmatching_addin"><ArcMap>
+    <Commands>
+        <Tool caption="Select Overlap" category="Gradient Domain Image Matching" class="selectoverlap" id="gradientmatching_addin.tool" image="" message="" tip="Draw a rectangle around the overlapping area."><Help heading="" /></Tool>
+        <ComboBox caption="Raster Layer 1: " category="Gradient Domain Image Matching" class="RasterLayer1" id="gradientmatching_addin.select_layer1" itemSizeString="WWWWWW" message="" rows="4" sizeString="WWWWWW" tip="Select a Raster Layer"><Help heading="" /></ComboBox>
+        <ComboBox caption="Raster Layer 2: " category="Gradient Domain Image Matching" class="RasterLayer2" id="gradientmatching_addin.select_layer2" itemSizeString="WWWWWW" message="" rows="4" sizeString="WWWWWW" tip="Select a Raster Layer"><Help heading="" /></ComboBox>
+        <Button caption="Gradient Match" category="Gradient Domain Image Matching" class="GradientMatch" id="gradientmatching_addin.gradient_match" image="Images\gradient_icon.png" tip="Click to Match Images"><Help heading="" /></Button>
+        </Commands>
+    <Extensions>
+        </Extensions>
+    <Toolbars>
+        <Toolbar caption="Gradient Domain Image Matching" category="Gradient Domain Image matching" id="gradientmatching_addin.toolbar" showInitially="true">
+            <Items>
+                <ComboBox refID="gradientmatching_addin.select_layer1" />
+                <ComboBox refID="gradientmatching_addin.select_layer2" />
+                <Tool refID="gradientmatching_addin.tool" />
+                <Button refID="gradientmatching_addin.gradient_match" />
+            </Items>
+        </Toolbar>
+        </Toolbars>
+    <Menus>
+        </Menus>
+    </ArcMap></AddIn></ESRI.Configuration>
