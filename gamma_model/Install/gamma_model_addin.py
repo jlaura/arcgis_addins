@@ -68,5 +68,11 @@ class SolveOnce(object):
         self.enabled = False
         self.checked = False
     def onClick(self):
+	layer = input_combobox.selectedlayer
+	pythonaddins.MessageBox('{}'.format(layer), 0)
+	
+	#Get the shapefile extent
+	desc = arcpy.Describe(layer)
+	pythonaddins.MessageBox('{}'.format(desc.Extent), 0)
 	"""Offload all processing to an external script"""
-        pass
+        
