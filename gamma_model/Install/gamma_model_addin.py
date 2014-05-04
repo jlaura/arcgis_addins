@@ -69,10 +69,21 @@ class SolveOnce(object):
         self.checked = False
     def onClick(self):
 	layer = input_combobox.selectedlayer
-	pythonaddins.MessageBox('{}'.format(layer), 0)
 	
-	#Get the shapefile extent
-	desc = arcpy.Describe(layer)
-	pythonaddins.MessageBox('{}'.format(desc.Extent), 0)
+	#Get the shapefile extent and make a clipping polygon.
+	extent = arcpy.Describe(layer).extent
+	array = arcpy.Array()
+	coords = [extent.lowerLeft, extent.lowerRight, extent.upperRight,
+	          extent.upperLeft, extent.lowerLeft]
+	
+	for c in coords:
+	    array.add(c)
+	clipping_polygon = arcpy.Polygon(array)
+	pythonaddins.MessageBox('{}'.format(clipping_polygon), 0)
+	
+	#Extract the feo and Th resolution rasters and convert them to ndarray
+	
+	
+	pythonaddins.MessageBox('{}'.format(extent.lowerLeft), 0)
 	"""Offload all processing to an external script"""
         
